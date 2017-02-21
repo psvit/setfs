@@ -1,0 +1,10 @@
+extends layout.pug
+block content
+  form(action='/setfs',method='get')
+   div.form-group
+    label(for='datefrom') datefrom:
+    input#datefrom.form-control(type='text', placeholder='17/02/2017' name='datefrom')
+   div.form-group
+    label(for='dateto') dateto:
+    input#dateto.form-control(type='text', placeholder='17/02/2017' name='dateto')
+   button.btn.btn-primary(type='submit') Submit

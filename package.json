@@ -1,0 +1,32 @@
+{
+  "name": "node-web-scrape",
+  "version": "0.0.1",
+  "description": "Scrape le web.",
+  "main": "server.js",
+  "author": "Scotch",
+  "dependencies": {
+    "adm-zip": "^0.4.7",
+    "async": "^2.1.5",
+    "cheerio": "latest",
+    "express": "latest",
+    "node-monkey": "^1.0.0-beta.4",
+    "pug": "^2.0.0-beta11",
+    "request": "latest"
+  },
+  "engines": {
+    "node": "6.9.5"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/psvit/setfin.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/psvit/setfin/issues"
+  },
+  "homepage": "https://github.com/psvit/setfin#readme"
+}
