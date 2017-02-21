@@ -1,17 +1,21 @@
 var express = require('express');
 var path = require('path');
-var AdmZip = require('adm-zip');
 var http = require('http');
 var fs = require('fs');
 var request = require('request');
 var cheerio = require('cheerio');
 var async = require('async');
-var app     = express();
-	
+var app     = express();	
 	
 var stocks =["2S","A","AAV","ABC","ABICO","ABPIF","ACAP","ACC","ADAM","ADVANC","AEC","AEONTS","AF","AFC","AGE","AH","AHC","AI","AIE","AIRA","AIT","AJ","AJD","AKP","AKR","ALUCON","AMANAH","AMARIN","AMATA","AMATAR","AMATAV","AMC","ANAN","AOT","AP","APCO","APCS","APURE","APX","AQ","AQUA","ARIP","ARROW","AS","ASEFA","ASIA","ASIAN","ASIMAR","ASK","ASN","ASP","ATP30","AUCT","AYUD","BA","BAFS","BANPU","BAT-3K","BAY","BBL","BCH","BCP","BDMS","BEAUTY","BEC","BEM","BFIT","BGT","BH","BIG","BIGC","BJC","BJCHI","BKD","BKI","BKKCP","BLA","BLAND","BLISS","BM","BOL","BR","BRC","BROCK","BROOK","BRR","BSBM","BSM","BTC","BTNC","BTS","BTSGIF","BUI","BWG","CBG","CCET","CCN","CCP","CEN","CENTEL","CFRESH","CGD","CGH","CHARAN","CHEWA","CHG","CHO","CHOTI","CHOW","CHUO","CI","CIG","CIMBT","CITY","CK","CKP","CM","CMO","CMR","CNS","CNT","COL","COLOR","COM7","CPALL","CPF","CPH","CPI","CPL","CPN","CPNCG","CPNRF","CPR","CPTGF","CRANE","CRYSTAL","CSC","CSL","CSP","CSR","CSS","CTARAF","CTW","CWT","DAII","DCC","DCON","DCORP","DELTA","DEMCO","DIF","DIMET","DNA","DRACO","DRT","DSGT","DTAC","DTC","DTCI","DTCPF","E","EA","EARTH","EASON","EASTW","ECF","ECL","EE","EFORL","EGATIF","EGCO","EIC","EMC","EPCO","EPG","ERW","ERWPF","ESSO","ESTAR","EVER","F&D","FANCY","FE","FER","FIRE","FMT","FNS","FOCUS","FORTH","FPI","FSMART","FSS","FUTUREPF","FVC","GBX","GC","GCAP","GEL","GENCO","GFPT","GIFT","GJS","GL","GLAND","GLOBAL","GLOW","GOLD","GOLDPF","GPSC","GRAMMY","GRAND","GREEN","GSTEL","GTB","GUNKUL","GVREIT","GYT","HANA","HFT","HMPRO","HOTPOT","HPF","HPT","HTC","HTECH","HYDRO","ICC","ICHI","IEC","IFEC","IFS","IHL","ILINK","IMPACT","INET","INOX","INSURE","INTUCH","IRC","IRCP","IRPC","IT","ITD","IVL","J","JAS","JASIF","JCP","JCT","JMART","JMT","JSP","JTS","JUBILE","JUTHA","JWD","K","KAMART","KASET","KBANK","KBS","KC","KCAR","KCE","KCM","KDH","KGI","KIAT","KKC","KKP","KOOL","KPNPF","KSL","KTB","KTC","KTECH","KTIS","KTP","KWC","KYE","L&E","LALIN","LANNA","LDC","LEE","LH","LHBANK","LHHOTEL","LHK","LHPF","LHSC","LIT","LOXLEY","LPH","LPN","LRH","LST","LTX","LUXF","LVT","M","MACO","MAJOR","MAKRO","MALEE","MANRIN","MATCH","MATI","MAX","MBAX","MBK","MBKET","MC","M-CHAI","MCOT","MCS","MDX","MEGA","METCO","MFC","MFEC","MIDA","M-II","MILL","MINT","MIPF","MIT","MJD","MJLF","MK","ML","MNIT","MNIT2","MNRF","MODERN","MONO","MONTRI","MOONG","M-PAT","MPG","MPIC","MSC","M-STOR","MTI","MTLS","NBC","NC","NCH","NCL","NDR","NEP","NEW","NEWS","NFC","NINE","NKI","NMG","NNCL","NOBLE","NOK","NPK","NPP","NSI","NTV","NUSA","NWR","NYT","OCC","OCEAN","OGC","OHTL","OISHI","ORI","OTO","PACE","PAE","PAF","PAP","PATO","PB","PCA","PCSGH","PDG","PDI","PE","PERM","PF","PG","PHOL","PICO","PIMO","PJW","PK","PL","PLANB","PLAT","PLE","PM","PMTA","POLAR","POMPUI","POPF","POST","PPF","PPM","PPP","PPS","PR","PRAKIT","PRANDA","PREB","PRECHA","PRG","PRIN","PRINC","PRO","PS","PSL","PSTC","PT","PTG","PTL","PTT","PTTEP","PTTGC","PYLON","Q-CON","QH","QHHR","QHOP","QHPF","QLT","QTC","RAM","RATCH","RCI","RCL","RICH","RICHY","RML","ROBINS","ROCK","ROH","ROJNA","RP","RPC","RS","RWI","S","S & J","S11","SABINA","SAFARI","SALEE","SAM","SAMART","SAMCO","SAMTEL","SANKO","SAPPE","SAT","SAUCE","SAWAD","SAWANG","SBPF","SC","SCAN","SCB","SCC","SCCC","SCG","SCI","SCN","SCP","SEAFCO","SEAOIL","SE-ED","SENA","SF","SFP","SGF","SGP","SHANG","SIAM","SIM","SIMAT","SINGER","SIRI","SIRIP","SIS","SITHAI","SKR","SLP","SMART","SMC","SMG","SMIT","SMK","SMM","SMPC","SMT","SNC","SNP","SOLAR","SORKON","SPA","SPACK","SPALI","SPC","SPCG","SPF","SPG","SPI","SPORT","SPPT","SPRC","SPVI","SPWPF","SR","SRICHA","SSC","SSF","SSI","SSPF","SSSC","SST","SSTPF","SSTSS","STA","STANLY","STAR","STEC","STHAI","STPI","SUC","SUPER","SUSCO","SUTHA","SVH","SVI","SVOA","SWC","SYMC","SYNEX","SYNTEC","T","TACC","TAE","TAKUNI","TAPAC","TASCO","TBSP","TC","TCAP","TCB","TCC","TCCC","TCIF","TCJ","TCMC","TCOAT","TEAM","TF","TFD","TFG","TFI","TFUND","TGCI","TGPRO","TGROWTH","TH","THAI","THANA","THANI","THCOM","THE","THIF","THIP","THL","THRE","THREL","TIC","TICON","TIF1","TIP","TIPCO","TISCO","TIW","TK","TKN","TKS","TKT","TLGF","TLHPF","TLOGIS","TLUXE","TMB","TMC","TMD","TMI","TMILL","TMT","TMW","TNDT","TNH","TNITY","TNL","TNP","TNPC","TNPF","TOG","TOP","TOPP","TPA","TPAC","TPBI","TPC","TPCH","TPCORP","TPIPL","TPOLY","TPP","TPROP","TR","TRC","TREIT","TRIF","TRS","TRT","TRU","TRUBB","TRUE","TSC","TSE","TSF","TSI","TSR","TSTE","TSTH","TT","TT&T","TTA","TTCL","TTI","TTL","TTLPF","TTTM","TTW","TU","TUCC","TU-PF","TVD","TVI","TVO","TVT","TWP","TWPC","TWZ","TYCN","U","UAC","UBIS","UEC","UKEM","UMI","UMS","UNIPF","UNIQ","UOBKH","UP","UPA","UPF","UPOIC","URBNPF","UREKA","UT","UTP","UV","UVAN","UWC","VARO","VGI","VI","VIBHA","VIH","VNG","VNT","VPO","VTE","WACOAL","WAVE","WG","WHA","WHABT","WHAPF","WHART","WICE","WIIK","WIN","WINNER","WORK","WORLD","WP","WR","XO","YCI","YNP","YUASA","ZMICO"];
 var count = 0;
-		
+
+var bodyParser = require('body-parser')
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+})); 
+
 app.use(express.static(path.join(__dirname, 'public')));		
 app.set('view engine', 'pug')
 
@@ -19,9 +23,9 @@ app.get('/', function (req, res) {
   res.render('index', { title: 'Hey', message: 'Hello there!' })
 })
 		
-app.get('/setfs', function(req, res){			
-			fromdate = '20%2F02%2F2017';
-			todate = '20%2F02%2F2017';
+app.post('/', function(req, res){									
+			fromdate = req.body.datefrom;
+			todate = req.body.dateto;
 									
 			pageamount = 1;
 			var done = 0;	
@@ -267,20 +271,7 @@ function IsJsonString(str) {
     return true;
 }
 
-		var download = function(filename, url) {
-			var tmpFilePath = "tmp/" + filename + ".zip"
-			http.get(url, function(response) {
-		 		response.on('data', function (data) {
-		 			fs.appendFileSync(tmpFilePath, data)
-				});
-		 		response.on('end', function() {
-		 			 var zip = new AdmZip(tmpFilePath)
-		 			 zip.extractAllTo("assets/" + filename)
-		 			 fs.unlink(tmpFilePath)
-			 	})
-		 	});
-		}
-
+		
 
   function decodeHTMLEntities (str) {
     if(str && typeof str === 'string') {

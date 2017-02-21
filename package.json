@@ -1,15 +1,14 @@
 {
-  "name": "node-web-scrape",
+  "name": "setfs",
   "version": "0.0.1",
-  "description": "Scrape le web.",
+  "description": "Scrape setfs.",
   "main": "server.js",
-  "author": "Scotch",
+  "author": "Wit",
   "dependencies": {
-    "adm-zip": "^0.4.7",
     "async": "^2.1.5",
+    "body-parser": "^1.16.1",
     "cheerio": "latest",
-    "express": "latest",
-    "node-monkey": "^1.0.0-beta.4",
+    "express": "latest",   
     "pug": "^2.0.0-beta11",
     "request": "latest"
   },

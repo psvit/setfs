@@ -1,6 +1,6 @@
 extends layout.pug
 block content
-  form(action='/setfs',method='get')
+  form(action='/',method='post')
    div.form-group
     label(for='datefrom') datefrom:
     input#datefrom.form-control(type='text', placeholder='17/02/2017' name='datefrom')
