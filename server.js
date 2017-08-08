@@ -29,7 +29,9 @@ app.post('/', function(req, res){
 									
 			pageamount = 1;
 			var done = 0;	
+			var done1 = 0;
 			url = 'http://www.set.or.th/set/newslist.do?to='+todate+'&headline=&submit=%E0%B8%84%E0%B9%89%E0%B8%99%E0%B8%AB%E0%B8%B2&symbol=&from='+fromdate+'&newsType=19&exchangeSymbols=&companyNews=on&company=true&exchangeNews=on&exchange=true'
+			console.log(url);
 			request(url, function(error, response, html){
 					if(!error){					
 						var $ = cheerio.load(html);					
@@ -38,10 +40,11 @@ app.post('/', function(req, res){
 						for	(z=0;z<pageamount;z++){
 							
 							page = '&currentpage='+z;
-							url = 'http://www.set.or.th/set/newslist.do?to='+todate+'&headline=&submit=%E0%B8%84%E0%B9%89%E0%B8%99%E0%B8%AB%E0%B8%B2&symbol=&from='+fromdate+'&newsType=19&exchangeSymbols=&companyNews=on&company=true&exchangeNews=on&exchange=true'
+							url = 'http://www.set.or.th/set/newslist.do?to='+todate+'&headline=&submit=%E0%B8%84%E0%B9%89%E0%B8%99%E0%B8%AB%E0%B8%B2&symbol=&from='+fromdate+'&newsType=19&exchangeSymbols=&companyNews=on&company=true&exchangeNews=on&exchange=true'							
 							url = url + page;
 							url = url + '&language=en&country=US';
-							
+							console.log(url);
+							done1++;
 							//console.log(url);											
 							request(url, function(error, response, html){																							
 								if(!error){															
@@ -109,9 +112,9 @@ app.post('/', function(req, res){
 												/* fs.appendFile('fs.txt', stockarr.join('| ') +'\n', function (err) {
 												});*/				
 												done--;																								
-												if(done == 0){										
-													res.write('Done!');
-													res.end();
+												if(done == 0 && done1 == 0){										
+													res.write('Done!');	
+													res.end();												
 												}
 											}
 											
@@ -124,6 +127,7 @@ app.post('/', function(req, res){
 										
 										return;
 									});																								
+									done1--;
 								}
 							})
 						}
