@@ -30,7 +30,8 @@ app.post('/', function(req, res){
 			pageamount = 1;
 			var done = 0;	
 			var done1 = 0;
-			url = 'http://www.set.or.th/set/newslist.do?to='+todate+'&headline=&submit=%E0%B8%84%E0%B9%89%E0%B8%99%E0%B8%AB%E0%B8%B2&symbol=&from='+fromdate+'&newsType=19&exchangeSymbols=&companyNews=on&company=true&exchangeNews=on&exchange=true'
+			//url = 'http://www.set.or.th/set/newslist.do?to='+todate+'&headline=&submit=%E0%B8%84%E0%B9%89%E0%B8%99%E0%B8%AB%E0%B8%B2&symbol=&from='+fromdate+'&newsType=19&exchangeSymbols=&companyNews=on&company=true&exchangeNews=on&exchange=true'			
+			url = 'https://www.set.or.th/set/newslist.do?source=&symbol=&securityType=&newsGroupId=3&headline=F45&from='+encodeURIComponent(fromdate)+'&to='+encodeURIComponent(todate)+'&submit=Search&language=en&country=US#content';
 			console.log(url);
 			request(url, function(error, response, html){
 					if(!error){					
@@ -40,7 +41,8 @@ app.post('/', function(req, res){
 						for	(z=0;z<pageamount;z++){
 							
 							page = '&currentpage='+z;
-							url = 'http://www.set.or.th/set/newslist.do?to='+todate+'&headline=&submit=%E0%B8%84%E0%B9%89%E0%B8%99%E0%B8%AB%E0%B8%B2&symbol=&from='+fromdate+'&newsType=19&exchangeSymbols=&companyNews=on&company=true&exchangeNews=on&exchange=true'							
+							//url = 'http://www.set.or.th/set/newslist.do?to='+todate+'&headline=&submit=%E0%B8%84%E0%B9%89%E0%B8%99%E0%B8%AB%E0%B8%B2&symbol=&from='+fromdate+'&newsType=19&exchangeSymbols=&companyNews=on&company=true&exchangeNews=on&exchange=true'							
+							url = 'https://www.set.or.th/set/newslist.do?source=&symbol=&securityType=&newsGroupId=3&headline=F45&from='+encodeURIComponent(fromdate)+'&to='+encodeURIComponent(todate)+'&submit=Search';
 							url = url + page;
 							url = url + '&language=en&country=US';
 							console.log(url);
@@ -64,48 +66,51 @@ app.post('/', function(req, res){
 											if(!error){																																
 											
 												var $dl = cheerio.load(html);
-												var content = $dl('.newsstory-pre-font').html();																				
-												var content = content.split(' ');	
-												var loop = 0;								
-												for (var i = 0; i < content.length;i++){		//loop ทั้งหมด Split by space																	
-														if (content[i].trim().indexOf('(loss)') >= 0){
-															loop = loop + 1;
-															var k = 0;											
-															for (var j = 0; j < content.length-i;j++){						//loop จนกว่าจะเจอตัวเลข																						
-																if (content[i+j].trim().search(/^[0-9.,()]+$/) == 0){																														
-																
-																	k = k + 1;															
-																	if ( k == 1){
-																		netprofit = content[i+j].trim();												
-																		stockarr.push(netprofit);																	
-																	}else if (k == 2){
-																		netprofit_prev = content[i+j].trim();																										
-																		stockarr.push(netprofit_prev);
-																		break;
-																	}
-																}																						
+												var content = $dl('.newsstory-pre-font').html();	
+												if(content){
+													
+													var content = content.split(' ');	
+													var loop = 0;								
+													for (var i = 0; i < content.length;i++){		//loop ทั้งหมด Split by space																	
+															if (content[i].trim().indexOf('(loss)') >= 0){
+																loop = loop + 1;
+																var k = 0;											
+																for (var j = 0; j < content.length-i;j++){						//loop จนกว่าจะเจอตัวเลข																						
+																	if (content[i+j].trim().search(/^[0-9.,()]+$/) == 0){																														
+																	
+																		k = k + 1;															
+																		if ( k == 1){
+																			netprofit = content[i+j].trim();												
+																			stockarr.push(netprofit);																	
+																		}else if (k == 2){
+																			netprofit_prev = content[i+j].trim();																										
+																			stockarr.push(netprofit_prev);
+																			break;
+																		}
+																	}																						
+																}
+															}else if (content[i].trim().indexOf('(baht)') >= 0){
+																loop = loop + 1;
+																var k = 0;
+																for (var j = 0; j < content.length-i;j++){						//loop จนกว่าจะเจอตัวเลข																						
+																	if (content[i+j].trim().search(/^[0-9.,()]+$/) == 0){																		
+																		k = k + 1;															
+																		if ( k == 1){
+																			netprofit = content[i+j].trim();												
+																			stockarr.push(netprofit);																	
+																		}else if (k == 2){
+																			netprofit_prev = content[i+j].trim();																										
+																			stockarr.push(netprofit_prev);
+																			break;
+																		}
+																	}																						
+																}											
+															}	
+																										
+															if (loop == 2){											
+																	break;
 															}
-														}else if (content[i].trim().indexOf('(baht)') >= 0){
-															loop = loop + 1;
-															var k = 0;
-															for (var j = 0; j < content.length-i;j++){						//loop จนกว่าจะเจอตัวเลข																						
-																if (content[i+j].trim().search(/^[0-9.,()]+$/) == 0){																		
-																	k = k + 1;															
-																	if ( k == 1){
-																		netprofit = content[i+j].trim();												
-																		stockarr.push(netprofit);																	
-																	}else if (k == 2){
-																		netprofit_prev = content[i+j].trim();																										
-																		stockarr.push(netprofit_prev);
-																		break;
-																	}
-																}																						
-															}											
-														}	
-																									
-														if (loop == 2){											
-																break;
-														}
+													} //for
 												}
 												stockarr.push(datetime);
 												res.write(stockarr.join('| ')+'\n');
