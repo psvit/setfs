@@ -37,7 +37,9 @@ app.post('/', function(req, res){
 					if(!error){					
 						var $ = cheerio.load(html);					
 						pageamount = $('.nav-number li a').last().text();
-												
+						if (!pageamount) {
+							pageamount =1;
+						}							
 						for	(z=0;z<pageamount;z++){
 							
 							page = '&currentpage='+z;
