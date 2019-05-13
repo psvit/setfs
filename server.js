@@ -2,9 +2,12 @@ var express = require('express');
 var path = require('path');
 var http = require('http');
 var fs = require('fs');
-var request = require('request');
+var limit = require("simple-rate-limiter");
+//var request = require('request');
+var request = limit(require("request")).to(5).per(1000);
 var cheerio = require('cheerio');
 var async = require('async');
+
 var app     = express();	
 	
 var stocks =["2S","A","AAV","ABC","ABICO","ABPIF","ACAP","ACC","ADAM","ADVANC","AEC","AEONTS","AF","AFC","AGE","AH","AHC","AI","AIE","AIRA","AIT","AJ","AJD","AKP","AKR","ALUCON","AMANAH","AMARIN","AMATA","AMATAR","AMATAV","AMC","ANAN","AOT","AP","APCO","APCS","APURE","APX","AQ","AQUA","ARIP","ARROW","AS","ASEFA","ASIA","ASIAN","ASIMAR","ASK","ASN","ASP","ATP30","AUCT","AYUD","BA","BAFS","BANPU","BAT-3K","BAY","BBL","BCH","BCP","BDMS","BEAUTY","BEC","BEM","BFIT","BGT","BH","BIG","BIGC","BJC","BJCHI","BKD","BKI","BKKCP","BLA","BLAND","BLISS","BM","BOL","BR","BRC","BROCK","BROOK","BRR","BSBM","BSM","BTC","BTNC","BTS","BTSGIF","BUI","BWG","CBG","CCET","CCN","CCP","CEN","CENTEL","CFRESH","CGD","CGH","CHARAN","CHEWA","CHG","CHO","CHOTI","CHOW","CHUO","CI","CIG","CIMBT","CITY","CK","CKP","CM","CMO","CMR","CNS","CNT","COL","COLOR","COM7","CPALL","CPF","CPH","CPI","CPL","CPN","CPNCG","CPNRF","CPR","CPTGF","CRANE","CRYSTAL","CSC","CSL","CSP","CSR","CSS","CTARAF","CTW","CWT","DAII","DCC","DCON","DCORP","DELTA","DEMCO","DIF","DIMET","DNA","DRACO","DRT","DSGT","DTAC","DTC","DTCI","DTCPF","E","EA","EARTH","EASON","EASTW","ECF","ECL","EE","EFORL","EGATIF","EGCO","EIC","EMC","EPCO","EPG","ERW","ERWPF","ESSO","ESTAR","EVER","F&D","FANCY","FE","FER","FIRE","FMT","FNS","FOCUS","FORTH","FPI","FSMART","FSS","FUTUREPF","FVC","GBX","GC","GCAP","GEL","GENCO","GFPT","GIFT","GJS","GL","GLAND","GLOBAL","GLOW","GOLD","GOLDPF","GPSC","GRAMMY","GRAND","GREEN","GSTEL","GTB","GUNKUL","GVREIT","GYT","HANA","HFT","HMPRO","HOTPOT","HPF","HPT","HTC","HTECH","HYDRO","ICC","ICHI","IEC","IFEC","IFS","IHL","ILINK","IMPACT","INET","INOX","INSURE","INTUCH","IRC","IRCP","IRPC","IT","ITD","IVL","J","JAS","JASIF","JCP","JCT","JMART","JMT","JSP","JTS","JUBILE","JUTHA","JWD","K","KAMART","KASET","KBANK","KBS","KC","KCAR","KCE","KCM","KDH","KGI","KIAT","KKC","KKP","KOOL","KPNPF","KSL","KTB","KTC","KTECH","KTIS","KTP","KWC","KYE","L&E","LALIN","LANNA","LDC","LEE","LH","LHBANK","LHHOTEL","LHK","LHPF","LHSC","LIT","LOXLEY","LPH","LPN","LRH","LST","LTX","LUXF","LVT","M","MACO","MAJOR","MAKRO","MALEE","MANRIN","MATCH","MATI","MAX","MBAX","MBK","MBKET","MC","M-CHAI","MCOT","MCS","MDX","MEGA","METCO","MFC","MFEC","MIDA","M-II","MILL","MINT","MIPF","MIT","MJD","MJLF","MK","ML","MNIT","MNIT2","MNRF","MODERN","MONO","MONTRI","MOONG","M-PAT","MPG","MPIC","MSC","M-STOR","MTI","MTLS","NBC","NC","NCH","NCL","NDR","NEP","NEW","NEWS","NFC","NINE","NKI","NMG","NNCL","NOBLE","NOK","NPK","NPP","NSI","NTV","NUSA","NWR","NYT","OCC","OCEAN","OGC","OHTL","OISHI","ORI","OTO","PACE","PAE","PAF","PAP","PATO","PB","PCA","PCSGH","PDG","PDI","PE","PERM","PF","PG","PHOL","PICO","PIMO","PJW","PK","PL","PLANB","PLAT","PLE","PM","PMTA","POLAR","POMPUI","POPF","POST","PPF","PPM","PPP","PPS","PR","PRAKIT","PRANDA","PREB","PRECHA","PRG","PRIN","PRINC","PRO","PS","PSL","PSTC","PT","PTG","PTL","PTT","PTTEP","PTTGC","PYLON","Q-CON","QH","QHHR","QHOP","QHPF","QLT","QTC","RAM","RATCH","RCI","RCL","RICH","RICHY","RML","ROBINS","ROCK","ROH","ROJNA","RP","RPC","RS","RWI","S","S & J","S11","SABINA","SAFARI","SALEE","SAM","SAMART","SAMCO","SAMTEL","SANKO","SAPPE","SAT","SAUCE","SAWAD","SAWANG","SBPF","SC","SCAN","SCB","SCC","SCCC","SCG","SCI","SCN","SCP","SEAFCO","SEAOIL","SE-ED","SENA","SF","SFP","SGF","SGP","SHANG","SIAM","SIM","SIMAT","SINGER","SIRI","SIRIP","SIS","SITHAI","SKR","SLP","SMART","SMC","SMG","SMIT","SMK","SMM","SMPC","SMT","SNC","SNP","SOLAR","SORKON","SPA","SPACK","SPALI","SPC","SPCG","SPF","SPG","SPI","SPORT","SPPT","SPRC","SPVI","SPWPF","SR","SRICHA","SSC","SSF","SSI","SSPF","SSSC","SST","SSTPF","SSTSS","STA","STANLY","STAR","STEC","STHAI","STPI","SUC","SUPER","SUSCO","SUTHA","SVH","SVI","SVOA","SWC","SYMC","SYNEX","SYNTEC","T","TACC","TAE","TAKUNI","TAPAC","TASCO","TBSP","TC","TCAP","TCB","TCC","TCCC","TCIF","TCJ","TCMC","TCOAT","TEAM","TF","TFD","TFG","TFI","TFUND","TGCI","TGPRO","TGROWTH","TH","THAI","THANA","THANI","THCOM","THE","THIF","THIP","THL","THRE","THREL","TIC","TICON","TIF1","TIP","TIPCO","TISCO","TIW","TK","TKN","TKS","TKT","TLGF","TLHPF","TLOGIS","TLUXE","TMB","TMC","TMD","TMI","TMILL","TMT","TMW","TNDT","TNH","TNITY","TNL","TNP","TNPC","TNPF","TOG","TOP","TOPP","TPA","TPAC","TPBI","TPC","TPCH","TPCORP","TPIPL","TPOLY","TPP","TPROP","TR","TRC","TREIT","TRIF","TRS","TRT","TRU","TRUBB","TRUE","TSC","TSE","TSF","TSI","TSR","TSTE","TSTH","TT","TT&T","TTA","TTCL","TTI","TTL","TTLPF","TTTM","TTW","TU","TUCC","TU-PF","TVD","TVI","TVO","TVT","TWP","TWPC","TWZ","TYCN","U","UAC","UBIS","UEC","UKEM","UMI","UMS","UNIPF","UNIQ","UOBKH","UP","UPA","UPF","UPOIC","URBNPF","UREKA","UT","UTP","UV","UVAN","UWC","VARO","VGI","VI","VIBHA","VIH","VNG","VNT","VPO","VTE","WACOAL","WAVE","WG","WHA","WHABT","WHAPF","WHART","WICE","WIIK","WIN","WINNER","WORK","WORLD","WP","WR","XO","YCI","YNP","YUASA","ZMICO"];
@@ -31,8 +34,8 @@ app.post('/', function(req, res){
 			var done = 0;	
 			var done1 = 0;
 			//url = 'http://www.set.or.th/set/newslist.do?to='+todate+'&headline=&submit=%E0%B8%84%E0%B9%89%E0%B8%99%E0%B8%AB%E0%B8%B2&symbol=&from='+fromdate+'&newsType=19&exchangeSymbols=&companyNews=on&company=true&exchangeNews=on&exchange=true'			
-			url = 'https://www.set.or.th/set/newslist.do?source=&symbol=&securityType=&newsGroupId=3&headline=F45&from='+encodeURIComponent(fromdate)+'&to='+encodeURIComponent(todate)+'&submit=Search&language=en&country=US#content';
-			console.log(url);
+			url = 'https://www.set.or.th/set/newslist.do?source=&symbol=&securityType=&newsGroupId=3&headline=F45&from='+encodeURIComponent(fromdate)+'&to='+encodeURIComponent(todate)+'&submit=Search&language=en&country=US#content';			
+			var time = 1000;
 			request(url, function(error, response, html){
 					if(!error){					
 						var $ = cheerio.load(html);					
@@ -47,13 +50,13 @@ app.post('/', function(req, res){
 							url = 'https://www.set.or.th/set/newslist.do?source=&symbol=&securityType=&newsGroupId=3&headline=F45&from='+encodeURIComponent(fromdate)+'&to='+encodeURIComponent(todate)+'&submit=Search';
 							url = url + page;
 							url = url + '&language=en&country=US';
-							console.log(url);
+							//console.log(url);
 							done1++;
 							//console.log(url);											
 							request(url, function(error, response, html){																							
 								if(!error){															
-									var $ = cheerio.load(html);					
-									$('.table-info-wrap tr').each(function(i,elem){
+									var $ = cheerio.load(html);										
+									$('.table-info-wrap tr').each(function(i,elem){								
 										if(i==0){
 											return true;
 										}
@@ -63,7 +66,9 @@ app.post('/', function(req, res){
 										var stockname = $(this).find('td').next().next().html();
 										stockarr.push(stockname);
 													
-										done++;
+										done++;				
+									  	
+										
 										request(dlurl, function(error, response, html){																																																						
 											if(!error){																																
 											
@@ -130,7 +135,7 @@ app.post('/', function(req, res){
 											
 											
 										})
-																
+																	  
 										
 										return;
 									});																								
