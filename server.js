@@ -27,8 +27,12 @@ app.set('view engine', 'pug')
 app.get('/', function (req, res) {
   res.render('index', { title: 'SETFS', message: 'Hello there!' })
 })
-		
-app.post('/', function(req, res){				
+app.get('/dl', function(req, res){
+  const file = `${__dirname}/fs.txt`;
+  res.download(file); // Set disposition and send it.
+});		
+app.post('/', function(req, res){		
+			res.set("Content-Type", "text/html");		
 			fs.truncate('fs.txt', 0, function(){console.log('done truncate file fs.txt.')})					
 			fromdate = req.body.datefrom;
 			todate = req.body.dateto;									
@@ -128,7 +132,7 @@ app.post('/', function(req, res){
 												}
 												stockarr.push(datetime);
 												stockobj[stockname].datetime = datetime;
-												res.write(stockname + ' - processing done!<br>');
+												res.write(stockname + ' - processing done!<br/>');
 												//res.write(stockarr.join('| ')+'\n');
 												/* fs.appendFile('fs.txt', stockarr.join('| ') +'\n', function (err) {
 												});*/				
@@ -138,7 +142,7 @@ app.post('/', function(req, res){
 														if (stockobj.hasOwnProperty(key)) {
 															var str = key+'|'+ stockobj[key].eps + '|' + stockobj[key].eps_prev + '|' + stockobj[key].netprofit + '|' + stockobj[key].netprofit_prev + '|' + stockobj[key].datetime+'\n';
 															console.log(key+'|'+ stockobj[key].eps + '|' + stockobj[key].eps_prev + '|' + stockobj[key].netprofit + '|' + stockobj[key].netprofit_prev + '|' + stockobj[key].datetime);															
-															res.write(str);
+															//res.write(str);
 															fs.appendFile('fs.txt', str, function (err) {
 																
 															});					
@@ -146,6 +150,8 @@ app.post('/', function(req, res){
 													}												
 													console.log('done');
 													res.write('Done!');	
+													
+													res.write('Download file <a href="/dl/">fs.txt</a>.')
 													res.end();												
 												}
 											}
